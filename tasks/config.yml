@@ -17,6 +17,27 @@
           dest: my.cnf
       register: config_set
 
+    - name: config | stat log dir
+      stat:
+        path: "{{ percona_log_dir }}"
+      register: datadir
+
+    - name: config | ensure default directories exist
+      file:
+        path: "{{ item.path }}"
+        state: "{{ item.state }}"
+        owner: mysql
+        group: mysql
+        mode: "{{ item.mode }}"
+      when: not datadir.stat.exists
+      loop:
+        - path: "{{ percona_log_dir }}"
+          state: directory
+          mode: '0775'
+        - path: "{{ mysqld.pid_path }}"
+          state: directory
+          mode: '0775'
+
     - name: config | test mysql config
       shell: mysqld --defaults-file=/etc/mysql/mysqld.cnf --validate-config
       changed_when: false
