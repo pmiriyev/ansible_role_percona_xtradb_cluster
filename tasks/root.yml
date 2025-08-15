@@ -65,6 +65,7 @@
         host_all: true
         state: absent
       no_log: "{{ percona_no_log }}"
+      when: ansible_os_family == "Debian"
 
     - name: root | secure root user
       mysql_user:
