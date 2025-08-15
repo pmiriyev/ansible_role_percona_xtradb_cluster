@@ -24,6 +24,7 @@ slow_query_log_file        = {{ mysqld.slow_log }}
 slow_query_log             = 1
 long_query_time            = {{ mysqld.slow_query_time }}
 log_slow_verbosity         = {{ mysqld.slow_log_verbosity }}
+secure-log-path            = {{ percona_log_dir }}
 
 {% if percona_cluster.enabled %}
 # replication settings
@@ -34,7 +35,6 @@ log_bin                   = mysql-bin
 log-bin-index             = mysql-bin.index
 binlog_expire_logs_seconds= {{ percona_expire_logs_seconds }}
 max_binlog_size           = {{ percona_max_binlog_size }}
-binlog_format             = {{ mysqld.binlog_format}}
 innodb_autoinc_lock_mode  = {{ mysqld.innodb.autoinc_lock_mode }}
 {% endif %}
 
@@ -73,7 +73,6 @@ lower_case_table_names    = {{ mysqld.lower_case_table_names }}
 init_connect                    = 'SET NAMES {{ mysqld.default.charset }} COLLATE {{ mysqld.default.collate }}'
 character-set-server            = {{ mysqld.default.charset }}
 collation-server                = {{ mysqld.default.collate }}
-skip-character-set-client-handshake
 
 # InnoDB settings
 innodb_dedicated_server         = {{ mysqld.innodb.dedicated_server }}
